@@ -1,8 +1,8 @@
 const AddressSpace = require('./addressspace');
 
 module.exports = class Rom extends AddressSpace {
-    constructor(offset, data) {
-        super();
+    constructor(offset, data, identifier) {
+        super(identifier);
 
         this.offset = offset;
         this.length = data.length;

@@ -1,12 +1,12 @@
 const AddressSpace = require('./addressspace');
 
 module.exports = class Ram extends AddressSpace {
-    constructor(offset, length) {
-        super();
-        
+    constructor(offset, length, identifier) {
+        super(identifier);
+
         this.space = [];
 
-        for (let i = 0; i < length; i++) {
+        for (let i = 0; i <= length; i++) {
             this.space[i] = 0x00;
         }
 
@@ -15,7 +15,7 @@ module.exports = class Ram extends AddressSpace {
     }
 
     accepts(address) {
-        return address >= this.offset && address < (this.offset + this.length);
+        return address >= this.offset && address <= (this.offset + this.length);
     }
 
     getByte(address) {

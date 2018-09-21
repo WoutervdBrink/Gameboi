@@ -71,3 +71,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Game Boy roms (obviously won't distribute these)
+roms/

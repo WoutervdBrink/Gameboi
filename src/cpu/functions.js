@@ -303,7 +303,7 @@ const bit = (r, b, bit) => {
 const call = (r, m, address) => {
     checkWord('address', address);
 
-    push(r, m, (r.pc + 3) & 0xFFFF);
+    push(r, m, (r.pc + 1) & 0xFFFF);
 
     r.pc = address;
 };

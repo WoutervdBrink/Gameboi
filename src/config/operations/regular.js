@@ -68,8 +68,8 @@ regular.defineOperation(0x1f, 1, 0, 'RRA', (r, m, a) => {r.a = functions.rotateR
 regular.defineOperation(0x20, [3, 2], 1, 'JR NZ, n', (r, m, a) => {if (!r.f_z) {r.addToPC(a[0]); return true;} return false;});
 
 regular.defineOperation(0x21, 3, 2, 'LD HL, nn', (r, m, a) => {r.hl = toWord(a)});
-regular.defineOperation(0x22, 2, 1, 'LD (HL+), A', (r, m, a) => {m.setByte(r.incrementHL(), r.a)});
-regular.defineOperation(0x23, 2, 0, 'INC HL', (r, m, a) => {r.hl = functions.inc(r, r.hl)});
+regular.defineOperation(0x22, 2, 0, 'LD (HL+), A', (r, m, a) => {m.setByte(r.incrementHL(), r.a)});
+regular.defineOperation(0x23, 2, 0, 'INC HL', (r, m, a) => {r.hl = (r.hl + 1) & 0xFFFF});
 regular.defineOperation(0x24, 1, 0, 'INC H', (r, m, a) => {r.h = functions.inc(r, r.h)});
 regular.defineOperation(0x25, 1, 0, 'DEC (H)', (r, m, a) => {m.setByte(functions.dec(r, m.getByte(r.h)))});
 

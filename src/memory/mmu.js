@@ -4,11 +4,29 @@ module.exports = class Mmu {
     }
 
     addAddressSpace(addressSpace) {
+        addressSpace.setMmu(this);
+
         this.addressSpaces.push(addressSpace);
     }
 
+    disableAddressSpace(identifier) {
+        this.addressSpaces.forEach((space) => {
+            if (space.identifier === identifier) {
+                space.enabled = false;
+            }
+        });
+    }
+
+    enableAddressSpace(identifier) {
+        this.addressSpaces.forEach((space) => {
+            if (space.identifier === identifier) {
+                space.enabled = true;
+            }
+        });
+    }
+
     getByte(address) {
-        const space = this.addressSpaces.find((space) => space.accepts(address));
+        const space = this.addressSpaces.find((space) => space.enabled && space.accepts(address));
 
         if (space === undefined) {
             throw new Error(`Could not find a suitable address space for $${address.toString(16)}.`);
@@ -24,6 +42,6 @@ module.exports = class Mmu {
             throw new Error(`Could not find a suitable address space for $${address.toString(16)}.`);
         }
 
-        space.setByte(value);
+        space.setByte(address, value);
     }
 };
