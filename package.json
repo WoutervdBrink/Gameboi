@@ -1,0 +1,17 @@
+{
+  "name": "gameboi",
+  "version": "1.0.0",
+  "description": "A Game Boy emulator",
+  "main": "src/index.js",
+  "author": "Wouter van den Brink <git@woutervdb.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "electron": "^2.0.7",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "mocha"
+  }
+}

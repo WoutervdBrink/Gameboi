@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Gameboi</title>
+
+        <style>
+            html, body {
+                font-family: monospace;
+                margin: 0;
+                padding: 0;
+            }
+            .left {
+                width: 320px;
+                float: left;
+            }
+            .right {
+                margin-left: 320px;
+            }
+            .registers {
+                width: 320px;
+            }
+            .registers th, .registers td {
+                width: 80px;
+                text-align: left;
+            }
+            .instructions {
+                width: 320px;
+            }
+            .instructions th, .instructions td {
+                text-align: left;
+            }
+            .instructions .active {
+                background: #DED;
+            }
+            #screen {
+                background: #dcfc5d;
+            }
+            .joypad {
+                border-top: 1px solid #DDD;
+                width: 320px;
+            }
+            .joypad td {
+                width: 80px;
+                height: 40px;
+                text-align: center;
+            }
+            .joypad .active {
+                background: #DED;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="left">
+            <div class="screen">
+                <canvas id="screen" width="320" height="288"></canvas>
+            </div>
+            <div class="registers">
+                <table>
+                    <tr>
+                        <th>af</th>
+                        <td>00</td>
+                        <th>bc</th>
+                        <td>00</td>
+                    </tr>
+                    <tr>
+                        <th>de</th>
+                        <td>00</td>
+                        <th>hl</th>
+                        <td>00</td>
+                    </tr>
+                    <tr>
+                        <th>sp</th>
+                        <td>00</td>
+                        <th>pc</th>
+                        <td>00</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="right">
+            <table class="instructions" cellpadding="3" cellspacing="0">
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+                <tr class="active">
+                    <th width="30px">433B</th>
+                    <td width="90px">E6 0F</td>
+                    <td>and</td>
+                    <td>a, 0F</td>
+                </tr>
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+                <tr>
+                    <th width="30px">433A</th>
+                    <td width="90px">78</td>
+                    <td>ld</td>
+                    <td>a, b</td>
+                </tr>
+            </table>
+            <table class="joypad" cellspacing="0">
+                <tr>
+                    <td>Right</td>
+                    <td>Left</td>
+                    <td>Up</td>
+                    <td>Down</td>
+                </tr>
+                <tr>
+                    <td class="active">A</td>
+                    <td>B</td>
+                    <td>Select</td>
+                    <td>Start</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
