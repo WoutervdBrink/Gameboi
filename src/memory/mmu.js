@@ -9,6 +9,16 @@ module.exports = class Mmu {
         this.addressSpaces.push(addressSpace);
     }
 
+    getAddressSpace(identifier) {
+        const space = this.addressSpaces.find((space) => space.enabled && space.identifier === identifier);
+
+        if (space === undefined) {
+            throw new Error(`Could not find address space with identifier ${identifier}.`);
+        }
+
+        return space;
+    }
+
     disableAddressSpace(identifier) {
         this.addressSpaces.forEach((space) => {
             if (space.identifier === identifier) {
@@ -32,7 +42,11 @@ module.exports = class Mmu {
             throw new Error(`Could not find a suitable address space for $${address.toString(16)}.`);
         }
 
-        return space.getByte(address);
+        const b = space.getByte(address);
+        if (typeof b === 'undefined') {
+            throw new Error(`Reading from ${address.toString(16)} gave undefined!`);
+        }
+        return b;
     }
 
     setByte(address, value) {

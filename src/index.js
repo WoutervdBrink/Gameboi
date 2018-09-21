@@ -6,6 +6,7 @@ const readFileAsync = promisify(fs.readFile);
 
 const Cpu = require('./cpu/cpu');
 const Cartridge = require('./memory/cartridge');
+const Ppu = require('./graphics/ppu');
 
 const config = require('./config');
 
@@ -16,7 +17,12 @@ const config = require('./config');
 
     config.cpu.mmu.addAddressSpace(cartridge);
 
-    const cpu = new Cpu(config.cpu);
+    const ppu = new Ppu(config.ppu);
+
+    const cpu = new Cpu({
+        ...config.cpu,
+        ppu
+    });
 
     while (true) {
         cpu.runOp();

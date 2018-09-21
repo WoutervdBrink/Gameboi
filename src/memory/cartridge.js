@@ -32,9 +32,9 @@ module.exports = class Cartridge extends AddressSpace {
             return this._rom[address];
         }
 
-        if (address >= 0xA000 && address <= 0x7FFF) {
+        if (address >= 0x4000 && address <= 0x7FFF) {
             // ROM bank 1..NN
-            throw new Error('TODO: implement ROM bank switching');
+            return this._rom[address];
         }
 
         if (address >= 0xA000 && address <= 0xBFFF) {
@@ -45,7 +45,8 @@ module.exports = class Cartridge extends AddressSpace {
 
     setByte(address, value) {
         if (address < 0xA000 || address > 0xBFFF) {
-            throw new Error('Writing outside ROM is not allowed!');
+            console.warn(`Warning: Tried to write to ${address.toString(16)} in ROM, which is not allowed.`);
+            return;
         }
 
         throw new Error(`TODO: Cartridge RAM, tried to set ${address.toString(16)} to ${value.toString(16)}`);

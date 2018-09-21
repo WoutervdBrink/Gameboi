@@ -38,9 +38,9 @@ regular.defineOperation(0x10, 1, 1, 'STOP 0', TODO);
 
 regular.defineOperation(0x11, 3, 2, 'LD DE, nn', (r, m, a) => {r.de = toWord(a)});
 
-regular.defineOperation(0x12, 2, 1, 'LD (DE), A', (r, m, a) => {m.setByte(r.de, r.a)});
+regular.defineOperation(0x12, 2, 0, 'LD (DE), A', (r, m, a) => {m.setByte(r.de, r.a)});
 
-regular.defineOperation(0x13, 2, 1, 'INC DE', (r, m, a) => {r.de = (r.de + 1) & 0xFFFF});
+regular.defineOperation(0x13, 2, 0, 'INC DE', (r, m, a) => {r.de = (r.de + 1) & 0xFFFF});
 
 regular.defineOperation(0x14, 1, 0, 'INC D', (r, m, a) => {r.d = functions.inc(r, r.d)});
 regular.defineOperation(0x15, 1, 0, 'DEC D', (r, m, a) => {r.d = functions.dec(r, r.d)});
@@ -111,7 +111,7 @@ regular.defineOperation(0x31, 3, 2, 'LD SP, nn', (r, m, a) => {r.sp = toWord(a)}
 
 regular.defineOperation(0x32, 2, 0, 'LD (HL-), A', (r, m, a) => {m.setByte(r.decrementHL(), r.a);});
 
-regular.defineOperation(0x33, 2, 1, 'INC SP', (r, m, a) => {r.sp = (r.sp + 1) & 0xFFFF});
+regular.defineOperation(0x33, 2, 0, 'INC SP', (r, m, a) => {r.sp = (r.sp + 1) & 0xFFFF});
 
 regular.defineOperation(0x34, 3, 0, 'INC (HL)', (r, m, a) => {m.setByte(r.hl, functions.inc(r, m.getByte(r.hl)))});
 regular.defineOperation(0x35, 3, 0, 'DEC (HL)', (r, m, a) => {m.setByte(r.hl, functions.dec(r, m.getByte(r.hl)))});
@@ -271,14 +271,14 @@ regular.defineOperation(0xb5, 1, 0, 'OR L', (r, m, a) => {r.a = functions.or(r, 
 regular.defineOperation(0xb6, 2, 0, 'OR (HL)', (r, m, a) => {r.a = functions.or(r.a, m.getByte(r.hl))});
 regular.defineOperation(0xb7, 1, 0, 'OR A', (r, m, a) => {r.a = functions.or(r, r.a, r.a)});
 
-regular.defineOperation(0xB8, 1, 0, 'CP B', (r, m, a) => {subBytes(r, r.a, r.b)});
-regular.defineOperation(0xB9, 1, 0, 'CP C', (r, m, a) => {subBytes(r, r.a, r.c)});
-regular.defineOperation(0xBa, 1, 0, 'CP D', (r, m, a) => {subBytes(r, r.a, r.d)});
-regular.defineOperation(0xBb, 1, 0, 'CP E', (r, m, a) => {subBytes(r, r.a, r.e)});
-regular.defineOperation(0xBc, 1, 0, 'CP H', (r, m, a) => {subBytes(r, r.a, r.h)});
-regular.defineOperation(0xBd, 1, 0, 'CP L', (r, m, a) => {subBytes(r, r.a, r.l)});
-regular.defineOperation(0xBe, 2, 0, 'CP (HL)', (r, m, a) => {subBytes(r, r.a, m.getByte(r.hl))});
-regular.defineOperation(0xBf, 1, 0, 'CP A', (r, m, a) => {subBytes(r, r.a, r.a)});
+regular.defineOperation(0xB8, 1, 0, 'CP B', (r, m, a) => {functions.subBytes(r, r.a, r.b)});
+regular.defineOperation(0xB9, 1, 0, 'CP C', (r, m, a) => {functions.subBytes(r, r.a, r.c)});
+regular.defineOperation(0xBa, 1, 0, 'CP D', (r, m, a) => {functions.subBytes(r, r.a, r.d)});
+regular.defineOperation(0xBb, 1, 0, 'CP E', (r, m, a) => {functions.subBytes(r, r.a, r.e)});
+regular.defineOperation(0xBc, 1, 0, 'CP H', (r, m, a) => {functions.subBytes(r, r.a, r.h)});
+regular.defineOperation(0xBd, 1, 0, 'CP L', (r, m, a) => {functions.subBytes(r, r.a, r.l)});
+regular.defineOperation(0xBe, 2, 0, 'CP (HL)', (r, m, a) => {functions.subBytes(r, r.a, m.getByte(r.hl))});
+regular.defineOperation(0xBf, 1, 0, 'CP A', (r, m, a) => {functions.subBytes(r, r.a, r.a)});
 
 regular.defineOperation(0xc0, [5, 2], 0, 'RET NZ', (r, m, a) => {if (!r.f_z) {functions.ret(r, m); return true;} return false;});
 
@@ -348,7 +348,7 @@ regular.defineOperation(0xe5, 4, 0, 'PUSH HL', (r, m, a) => {functions.push(r, m
 
 regular.defineOperation(0xe6, 2, 1, 'AND n', (r, m, a) => {r.a = functions.and(r, r.a, a[0])});
 
-regular.defineOperation(0xe7, 4, 1, 'RST 20H', (r, m, a) => {functions.reset(r, m, 0x20)});
+regular.defineOperation(0xe7, 4, 0, 'RST 20H', (r, m, a) => {functions.reset(r, m, 0x20)});
 
 regular.defineOperation(0xe8, 4, 1, 'ADD SP, n', (r, m, a) => {r.sp = addSignedByteToWord(r, r.sp, a[0])});
 
@@ -372,11 +372,11 @@ regular.defineOperation(0xf5, 4, 0, 'PUSH AF', (r, m, a) => {functions.push(r, m
 
 regular.defineOperation(0xf6, 2, 1, 'OR n', (r, m, a) => {r.a = functions.or(r.a, a[0])});
 
-regular.defineOperation(0xf7, 4, 1, 'RST 30H', (r, m, a) => {functions.reset(r, m, 0x30)});
+regular.defineOperation(0xf7, 4, 0, 'RST 30H', (r, m, a) => {functions.reset(r, m, 0x30)});
 
 regular.defineOperation(0xf8, 4, 1, 'LD HL, SP+n', (r, m, a) => {r.hl = addSignedByteToWord(r, r.sp, a[0])});
 
-regular.defineOperation(0xf9, 2, 1, 'LD SP, HL', (r, m, a) => {r.sp = r.hl;});
+regular.defineOperation(0xf9, 2, 0, 'LD SP, HL', (r, m, a) => {r.sp = r.hl;});
 
 regular.defineOperation(0xfa, 4, 2, 'LD A, (nn)', (r, m, a) => {r.a = m.getByte(toWord(a))});
 
