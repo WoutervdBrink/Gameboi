@@ -342,7 +342,7 @@ regular.defineOperation(0xe0, 3, 1, 'LDH (n), A', (r, m, a) => {m.setByte(0xFF00
 
 regular.defineOperation(0xe1, 3, 0, 'POP HL', (r, m, a) => {r.hl = functions.pop(r, m)});
 
-regular.defineOperation(0xe2, 2, 1, 'LD (C), A', (r, m, a) => {m.setByte(0xff00 + r.c, r.a)});
+regular.defineOperation(0xe2, 2, 0, 'LD (C), A', (r, m, a) => {m.setByte(0xff00 + r.c, r.a)});
 
 regular.defineOperation(0xe5, 4, 0, 'PUSH HL', (r, m, a) => {functions.push(r, m, r.hl)});
 
@@ -364,7 +364,7 @@ regular.defineOperation(0xf0, 3, 1, 'LDH A, (n)', (r, m, a) => {r.a = m.getByte(
 
 regular.defineOperation(0xf1, 3, 0, 'POP AF', (r, m, a) => {r.af = functions.pop(r, m)});
 
-regular.defineOperation(0xf2, 2, 1, 'LD A, (C)', (r, m, a) => {r.a = m.getByte(0xFF00 + r.c)});
+regular.defineOperation(0xf2, 2, 0, 'LD A, (C)', (r, m, a) => {r.a = m.getByte(0xFF00 + r.c)});
 
 regular.defineOperation(0xf3, 1, 0, 'DI', (r, m, a) => {r.ime = 0});
 
