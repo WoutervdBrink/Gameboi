@@ -8,8 +8,8 @@ module.exports = class Unused extends AddressSpace {
         this.length = length;
     }
 
-    accepts(address) {
-        return address >= this.offset && address <= (this.offset + this.length);
+    get ranges() {
+        return [[this.offset, this.offset + this.length]];
     }
 
     getByte(address) {

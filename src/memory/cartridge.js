@@ -22,6 +22,10 @@ module.exports = class Cartridge extends AddressSpace {
         return this._title;
     }
 
+    get ranges() {
+        return [[0, 0x7FFF], [0xA000, 0xBFFF]];
+    }
+
     accepts(address) {
         return (address >= 0 && address <= 0x7FFF) || (address >= 0xA000 && address <= 0xBFFF);
     }
@@ -46,6 +50,7 @@ module.exports = class Cartridge extends AddressSpace {
     setByte(address, value) {
         if (address < 0xA000 || address > 0xBFFF) {
             console.warn(`Warning: Tried to write to ${address.toString(16)} in ROM, which is not allowed.`);
+            //throw new Error('breakpoint');
             return;
         }
 

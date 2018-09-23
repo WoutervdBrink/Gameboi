@@ -7,6 +7,7 @@ const readFileAsync = promisify(fs.readFile);
 const Cpu = require('./cpu/cpu');
 const Cartridge = require('./memory/cartridge');
 const Ppu = require('./graphics/ppu');
+const Debugger = require('./debugger');
 
 const config = require('./config');
 
@@ -24,7 +25,7 @@ const config = require('./config');
         ppu
     });
 
-    while (true) {
-        cpu.runOp();
-    }
+    const dbger = new Debugger(cpu);
+
+    dbger.start();
 })();

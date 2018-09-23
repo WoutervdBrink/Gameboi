@@ -4,7 +4,7 @@ module.exports = class Ram extends AddressSpace {
     constructor(offset, length, identifier) {
         super(identifier);
 
-        this.space = [];
+        this.space = new Uint8Array(length);
 
         for (let i = 0; i <= length; i++) {
             this.space[i] = 0x00;
@@ -14,8 +14,8 @@ module.exports = class Ram extends AddressSpace {
         this.length = length;
     }
 
-    accepts(address) {
-        return address >= this.offset && address <= (this.offset + this.length);
+    get ranges() {
+        return [[this.offset, this.offset + this.length]];
     }
 
     getByte(address) {

@@ -16,7 +16,7 @@ const addBytesAndCarry = (r, b1, b2) => {
     checkByte('b1', b1);
     checkByte('b2', b2);
 
-    const carry = f.c;
+    const carry = r.f_c;
 
     r.f_z = ((b1 + b2 + carry) & 0xFF) === 0;
     r.f_n = 0;
@@ -145,17 +145,14 @@ const swap = (r, b) => {
 const rotateLeft = (r, b) => {
     checkByte('b', b);
 
-    let result = (b << 1) & 0xFF;
+    let bit7 = (b >> 7) & 1;
 
-    if ((b & (1 << 7)) !== 0) {
-        result |= 1;
-        r.f_c = 1;
-    } else {
-        r.f_c = 0;
-    }
-    f.z = result === 0;
-    f.n = 0;
-    f.h = 0;
+    let result = ((b << 1) & 0xFF) | (b >> 7);
+
+    r.f_c = bit7;
+    r.f_z = result === 0;
+    r.f_n = 0;
+    r.f_h = 0;
 
     return result;
 };
@@ -163,12 +160,10 @@ const rotateLeft = (r, b) => {
 const rotateLeftThroughCarry = (r, b) => {
     checkByte('b', b);
 
-    let result = (b << 1) & 0xFF;
+    let bit7 = (b >> 7) & 1;
+    let result = (((b << 1) | r.f_c) & 0xFF);
 
-    result |= (r.f_c ? 1 : 0);
-
-    r.f_c = (b & (1 << 7)) !== 0;
-
+    r.f_c = bit7;
     r.f_z = result === 0;
     r.f_n = 0;
     r.f_h = 0;
@@ -303,7 +298,7 @@ const bit = (r, b, bit) => {
 const call = (r, m, address) => {
     checkWord('address', address);
 
-    push(r, m, (r.pc + 1) & 0xFFFF);
+    push(r, m, (r.pc) & 0xFFFF);
 
     r.pc = address;
 };
@@ -323,4 +318,4 @@ const ret = (r, m) => {
 module.exports = {addBytes, addBytesAndCarry, subBytes, subBytesWithCarry, and,
     or, xor, inc, dec, swap, rotateLeft, rotateLeftThroughCarry, rotateRight,
     rotateRightThroughCarry, addSignedByteToWord, shiftLeft, shiftRightLogical,
-    shiftRightArithmetic, push, pop, bit, call, reset, ret};
+    shiftRightArithmetic, push, pop, bit, call, reset, ret, addWords};

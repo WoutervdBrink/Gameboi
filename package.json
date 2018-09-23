@@ -2,7 +2,7 @@
   "name": "gameboi",
   "version": "1.0.0",
   "description": "A Game Boy emulator",
-  "main": "src/index.js",
+  "main": "src/ui.js",
   "author": "Wouter van den Brink <git@woutervdb.com>",
   "license": "MIT",
   "private": false,

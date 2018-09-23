@@ -11,8 +11,8 @@ module.exports = class Ioports extends AddressSpace {
         }
     }
 
-    accepts(address) {
-        return address >= 0xFF00 && address <= 0xFF7F;
+    get ranges() {
+        return [[0xFF00, 0xFF7F]];
     }
 
     getByte(address) {

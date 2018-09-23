@@ -1,61 +1,71 @@
 module.exports = class Mmu {
     constructor() {
-        this.addressSpaces = [];
+        this.addressSpaces = {};
+
+        this.cache = [];
     }
 
     addAddressSpace(addressSpace) {
         addressSpace.setMmu(this);
 
-        this.addressSpaces.push(addressSpace);
+        this.addressSpaces[addressSpace.identifier] = addressSpace;
+
+        this._buildCacheForSpace(addressSpace);
+    }
+
+    _buildCacheForSpace(space) {
+        space.ranges.forEach((range) => {
+            for (let i = range[0]; i <= range[1]; i++) {
+                this.cache[i] = space;
+            }
+        });
+    }
+
+    _rebuildCache() {
+        this.cache = [];
+
+        Object.keys(this.addressSpaces).forEach((identifier) => {
+            const space = this.addressSpaces[identifier];
+
+            if (!space.enabled) {
+                return;
+            }
+
+            this._buildCacheForSpace(space);
+        });
     }
 
     getAddressSpace(identifier) {
-        const space = this.addressSpaces.find((space) => space.enabled && space.identifier === identifier);
-
-        if (space === undefined) {
-            throw new Error(`Could not find address space with identifier ${identifier}.`);
+        if (this.addressSpaces[identifier]) {
+            return this.addressSpaces[identifier];
         }
 
-        return space;
+        throw new Error(`Could not find address space with identifier ${identifier}`);
+    }
+
+    findAddressSpace(address) {
+        const space = this.cache[address];
+
+        if (space) {
+            return space;
+        }
+
+        throw new Error(`Could not find address space for $${address.toString(16)}.`);
     }
 
     disableAddressSpace(identifier) {
-        this.addressSpaces.forEach((space) => {
-            if (space.identifier === identifier) {
-                space.enabled = false;
-            }
-        });
+        this.getAddressSpace(identifier).enabled = false;
     }
 
     enableAddressSpace(identifier) {
-        this.addressSpaces.forEach((space) => {
-            if (space.identifier === identifier) {
-                space.enabled = true;
-            }
-        });
+        this.getAddressSpace(identifier).enabled = true;
     }
 
     getByte(address) {
-        const space = this.addressSpaces.find((space) => space.enabled && space.accepts(address));
-
-        if (space === undefined) {
-            throw new Error(`Could not find a suitable address space for $${address.toString(16)}.`);
-        }
-
-        const b = space.getByte(address);
-        if (typeof b === 'undefined') {
-            throw new Error(`Reading from ${address.toString(16)} gave undefined!`);
-        }
-        return b;
+        return this.findAddressSpace(address).getByte(address);
     }
 
     setByte(address, value) {
-        const space = this.addressSpaces.find((space) => space.accepts(address));
-
-        if (space === undefined) {
-            throw new Error(`Could not find a suitable address space for $${address.toString(16)}.`);
-        }
-
-        space.setByte(address, value);
+        this.findAddressSpace(address).setByte(address, value);
     }
 };

@@ -16,53 +16,39 @@ module.exports = class Cpu {
         this.cbOperations = cbOperations;
         this.mmu = mmu;
         this.ppu = ppu;
-
-        this.calledOps = [];
-    }
-
-    fixHexDump(b) {
-        if (b.length < 2) { return '0' + b; }
-        return b;
     }
 
     runOp() {
+        let operation;
+
+        let pcRaw = this.registers.pc;
+        let pc = this.registers.pc.toString(16);
+
+        const args = [];
+
+        let collection = this.operations;
+
         try {
-            let collection = this.operations;
-
-            let pc = this.registers.pc.toString(16);
-
             let opCode = this.mmu.getByte(this.registers.pc++);
 
             if (typeof opCode === 'undefined') {
-                console.warn(`opCode from ${pc} was undefined!`);
+                console.error(`opCode from ${pc} was undefined!`);
                 process.exit(1);
             }
-            let calledOp = this.fixHexDump(opCode.toString(16));
 
             if (opCode === 0xCB) {
                 pc += ' ' + this.registers.pc.toString(16);
+
                 opCode = this.mmu.getByte(this.registers.pc++);
-                calledOp += this.fixHexDump(opCode.toString(16));
+
                 collection = this.cbOperations;
             }
 
-            let operation;
-
-            const args = [];
-
             operation = collection.getOperation(opCode);
-
-            calledOp += ` ${operation.label}`;
-
-            if (this.calledOps.indexOf(calledOp) < 0) {
-                this.calledOps.push(calledOp);
-            }
 
             for (let i = 0; i < operation.numArgs; i++) {
                 args[i] = this.mmu.getByte(this.registers.pc++);
             }
-
-            //console.log(`${pc}: ${operation.label}   ${args.map((arg) => arg.toString(16)).join(' ')}`);
 
             const result = operation.callback(this.registers, this.mmu, args);
 
@@ -74,9 +60,7 @@ module.exports = class Cpu {
 
             this.ppu.update(this.cycles);
 
-
-            // console.log('  ' + this.registers.dump());
-            // console.log(`${Math.floor(this.cycles / 114)} cycles`);
+            return {operation, args, pc, pcRaw};
         } catch (e) {
             console.error(e);
 
@@ -88,8 +72,6 @@ module.exports = class Cpu {
             console.log(`${pc}: ${operation.label}   ${args.map((arg) => arg.toString(16)).join(' ')}`);
             console.log(`Memory following: ${mem}`);
             console.log('  ' + this.registers.dump());
-            this.calledOps.sort();
-            //console.log(`Called ops:\n${this.calledOps.join('\n')}`);
             process.exit(1);
         }
     }

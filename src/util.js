@@ -80,6 +80,14 @@ const getLSB = (w) => {
     return w & 0xFF;
 };
 
+const sleep = (ms) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, ms);
+    });
+}
+
 module.exports = {
-    checkBit, checkByte, checkWord, toWord, abs, isNegative, setBit, getBit, getMSB, getLSB
+    checkBit, checkByte, checkWord, toWord, abs, isNegative, setBit, getBit, getMSB, getLSB, sleep
 };

@@ -13,6 +13,9 @@ module.exports = class AddressSpace {
     get identifier() {
         return this._identifier;
     }
+    get ranges() {
+        throw new Error(`Please implement ranges.`);
+    }
     accepts(address) {
         throw new Error('Please implement accepts().');
     }
