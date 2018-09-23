@@ -20,7 +20,6 @@ module.exports = class Ioports extends AddressSpace {
     }
 
     setByte(address, value) {
-        //console.log(`IO: setByte(${address.toString(16)}, ${value.toString(16)})`);
         this.space[address - 0xFF00] = value;
 
         if (address == 0xFF50) {
